@@ -19,6 +19,4 @@ export async function runAgent(
   userMessage: string,
   conversationHistory: ModelMessage[],
   callbacks: AgentCallbacks,
-): Promise<ModelMessage[]> {
-  // Filter and check if we need to compact the conversation history before starting
-}
+): Promise<ModelMessage[]> {}
