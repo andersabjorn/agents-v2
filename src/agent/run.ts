@@ -29,5 +29,10 @@ export async function runAgent(
         },
         
     });
-};
-console.log("done")
+
+
+await Laminar.flush();
+
+console.log("done");
+
+}
