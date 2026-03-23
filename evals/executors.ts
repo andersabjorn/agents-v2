@@ -12,7 +12,7 @@ import {buildMessages} from "./utils.ts";
 
 const TOOL_DEFINITIONS: any = {
   readFile: {
-    description: "Read the content of a file at the specified path",
+    description: "Read the content of a file at the specified path. Use this to examine file contents",
     parameters: z.object({
       path: z.string().describe('the path to the file you want to read'),
     }),
@@ -45,7 +45,7 @@ const TOOL_DEFINITIONS: any = {
     },
   };
 
-export const singelTurnExecuter = async (data: EvalData) => {
+export const singelTurnExecutorWithMocks = async (data: EvalData) => {
   const messages = buildMessages(data);
   
   const tools : ToolSet = {};
