@@ -14,7 +14,7 @@ evaluate({
     executor,
     evaluators: {
         selectionScore: (output: any, target: any) => {
-            if (target === 'secondary') return 1;
+            if (target.category === 'secondary') return 1;
             
             return toolSelectionScore(output, target);
         },

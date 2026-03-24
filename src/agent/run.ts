@@ -7,7 +7,7 @@ import { SYSTEM_PROMPT } from "./system/prompt.ts";
 
 import type { AgentCallbacks } from "../types.ts";
 
-const MODEL_NAME = "gpt-4o-mini";
+const MODEL_NAME = "gpt-4o";
 
 Laminar.initialize({
     projectApiKey: process.env.LMNR_PROJECT_API_KEY,
