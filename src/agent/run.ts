@@ -31,6 +31,7 @@ export async function runAgent(
     });
 
 //Evaluating the code and try to get a higer score
+    // Practise on evaluation trying to make progress
 await Laminar.flush();
 
 console.log("done");
