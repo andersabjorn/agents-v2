@@ -6,17 +6,36 @@ import { executeTool } from "./executeTool.ts";
 import { SYSTEM_PROMPT } from "./system/prompt.ts";
 import { Laminar } from "@lmnr-ai/lmnr";
 import type { AgentCallbacks, ToolCallInfo } from "../types.ts";
-
 import { filterCompatibleMessages } from "./system/filterMessages.ts";
 
 Laminar.initialize({
   projectApiKey: process.env.LMNR_API_KEY,
 });
 
-const MODEL_NAME = "gpt-5-mini";
+const MODEL_NAME = "GPT-5.4 nano";
 
 export async function runAgent(
   userMessage: string,
   conversationHistory: ModelMessage[],
   callbacks: AgentCallbacks,
 ): Promise<ModelMessage[]> {}
+ const workingHistory = filterCompatibleMessages(conversationHistory):
+
+const messages: ModelMessage[] = [
+     {role: "system", content: SYSTEM_PROMPT},
+  ...workingHistory,
+  { role: "user", content: userMessage },
+  ];
+
+let fullResponse = "";
+
+while (true) {
+  const result = streamText({
+    model: openai(MODEL_NAME),
+    messages,
+    tools,
+    experimental_telemetry: {
+      isEnabled: true,
+    }
+  })
+} 
