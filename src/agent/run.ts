@@ -12,7 +12,7 @@ Laminar.initialize({
   projectApiKey: process.env.LMNR_API_KEY,
 });
 
-const MODEL_NAME = "GPT-5.4 nano";
+const MODEL_NAME = "gpt-4o-mini";
 
 export async function runAgent(
   userMessage: string,
