@@ -13,7 +13,7 @@ Laminar.initialize({
 });
 
 const MODEL_NAME = "gpt-4o-mini";
-
+// Checked some evals
 export async function runAgent(
   userMessage: string,
   conversationHistory: ModelMessage[],
