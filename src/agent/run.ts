@@ -107,3 +107,5 @@ while (true) {
 callbacks.onComplete(fullResponse);
 return messages;
 }
+
+//Checked status on the agi agent and made som evals to check status
