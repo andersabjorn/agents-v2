@@ -1,6 +1,6 @@
-import { generateText, stepCountIs, tool, type ToolSet } from "ai";
-import { openai } from "@ai-sdk/openai";
-import { z } from "zod";
+import { generateText, stepCountIs, tool, type ToolSet }from "ai";
+import {openai} from "@ai-sdk/openai";
+import {z} from "zod";
 
 import type {
   EvalData,
@@ -8,96 +8,77 @@ import type {
   MultiTurnEvalData,
   MultiTurnResult,
 } from "./types.ts";
-import { buildMessages, buildMockedTools } from "./utils.ts";
+import {buildMessages} from "./utils.ts";
 
-/**
- * Tool definitions for mocked single-turn evaluations.
- * These define the schema the LLM sees without real implementations.
- */
-const TOOL_DEFINITIONS: Record<
-  string,
-  { description: string; parameters: z.ZodObject<z.ZodRawShape> }
-> = {
-  // File tools
+const TOOL_DEFINITIONS: any = {
   readFile: {
-    description: "Read the contents of a file at the specified path",
+    description: "Read the contents of a file at the specified path. Use this to examine file contents",
     parameters: z.object({
-      path: z.string().describe("The path to the file to read"),
+      path: z.string().describe('the path to the file you want to read'),
     }),
+
   },
   writeFile: {
-    description: "Write content to a file at the specified path",
+    description: "Write given content to the file at the given path",
     parameters: z.object({
-      path: z.string().describe("The path to the file to write"),
-      content: z.string().describe("The content to write to the file"),
+      path: z.string().describe('the path to the file you want to write to'),
+      content: z.string().describe("the content you want to write to the file")
     }),
   },
-  listFiles: {
-    description: "List all files in a directory",
-    parameters: z.object({
-      path: z.string().describe("The directory path to list files from"),
-    }),
-  },
-  deleteFile: {
-    description: "Delete a file at the specified path",
-    parameters: z.object({
-      path: z.string().describe("The path to the file to delete"),
-    }),
-  },
-  // Shell tools
-  runCommand: {
-    description: "Execute a shell command and return its output",
-    parameters: z.object({
-      command: z.string().describe("The shell command to execute"),
-    }),
-  },
-};
+    listFiles: {
+      description: "List the all the files in  a directory",
+      parameters: z.object({
+        path: z.string().describe('the path the directory in which  you want to list the files'),
+      }),
+    },
+    deleteFile: {
+      description: "Delete a file at the given path",
+      parameters: z.object({
+        path: z.string().describe('the path to the file that you want to delete'),
+      }),
+    },
+    runCommand: {
+      description: "execute a shell command and return its output",
+      parameters: z.object({
+        command: z.string().describe('the shell command to execute'),
+      }),
+    },
+  };
 
-/**
- * Single-turn executor with mocked tools.
- * Uses predefined tool definitions - tools never execute, only selection is tested.
- */
-export async function singleTurnWithMocks(
-  data: EvalData,
-): Promise<SingleTurnResult> {
+export const singelTurnExecutorWithMocks = async (data: EvalData) => {
   const messages = buildMessages(data);
-
-  // Build mocked tools from definitions
-  const tools: ToolSet = {};
-  for (const toolName of data.tools) {
-    const def = TOOL_DEFINITIONS[toolName];
+  console.log("data.tools:", data.tools);
+  
+  const tools : ToolSet = {};
+  for (const toolName of data.tools){
+    const def = TOOL_DEFINITIONS[toolName]
+    
     if (def) {
-      tools[toolName] = tool({
+      tools[toolName]= tool({
         description: def.description,
         inputSchema: def.parameters,
       });
     }
   }
-
-  const result = await generateText({
+  const {toolCalls} = await generateText({
     model: openai(data.config?.model ?? "gpt-4o-mini"),
     messages,
     tools,
     stopWhen: stepCountIs(1),
     temperature: data.config?.temperature ?? undefined,
+    
   });
-
-  // Extract tool calls from the result
-  const toolCalls = (result.toolCalls ?? []).map((tc) => ({
+  
+  const calls = toolCalls.map(tc => ({
     toolName: tc.toolName,
-    args: "args" in tc ? tc.args : {},
+    args: 'args' in tc ? tc.args : {},
   }));
-
+  
   const toolNames = toolCalls.map((tc) => tc.toolName);
-
+  
   return {
     toolCalls,
     toolNames,
     selectedAny: toolNames.length > 0,
   };
-}
-
-/**
- * Multi-turn executor with mocked tools.
- * Runs a complete agent loop with tools returning fixed values.
- */
+};

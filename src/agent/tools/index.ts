@@ -1,6 +1,4 @@
-import { getDateTime } from "./dateTime.ts";
-
-// All tools combined for the agent
+import { dateTime } from "./dateTime.ts";
 export const tools = {
-  getDateTime,
+    dateTime, 
 };
